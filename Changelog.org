@@ -1,0 +1,22 @@
+* V 2.0
+  Version 2.0 is an almost complete rewrite of the qr_mumps
+  package. Here are some of the main changes wrt previous versions
+  - Parallelism is now achieved using the StarPU runtime engine.
+  - 2D block partitioning can be used for frontal matrices in
+    combination with communication avoiding dense factorization
+    algorithms
+  - it is possible to bound the memory consumption of the parallel
+    factorization phase
+  - pipelining of operation can be achieved through the asynchronous
+    API
+  - the error handling has been deeply modified to make it thread-safe
+
+
+* V 1.2
+  - Added a method to extract the R factor once the factorization is
+    computed.
+
+* V 1.1
+  - There is no limit to the number of concurrent instances of
+    qrm_spmat_c in the C interface
+  - A number of minor bugfixes

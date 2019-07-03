@@ -1,0 +1,72 @@
+include ../Make.inc
+
+LIB=../lib/lib${arith}qrm.a
+CLIB=../lib/libqrm_common.a
+
+ifndef ARITH
+ARITH = d
+endif
+
+INCLUDES += -I../include
+
+testing: $(addsuffix prec,$(ARITH))
+
+lib:
+	(cd ..; make lib)
+
+dprec:
+	($(MAKE) qrm_testing  PREC=-Ddprec  arith=d)
+
+sprec:
+	($(MAKE) qrm_testing  PREC=-Dsprec  arith=s)
+
+zprec:
+	($(MAKE) qrm_testing  PREC=-Dzprec  arith=z)
+
+cprec:
+	($(MAKE) qrm_testing  PREC=-Dcprec  arith=c)
+
+
+.PHONY: clean distclean
+
+distclean: clean
+	(rm -f *.F90 *.c *.h *.f)
+
+clean: 
+	(rm -f *.o *.mod *qrm_testing)
+
+
+
+TESTINGTEMPLATES = $(topdir)/src/testing/qrm_testing.F90 \
+		   $(topdir)/src/testing/qrm_testing_mod.F90 \
+		   $(topdir)/src/testing/qrm_test_facto.F90 \
+		   $(topdir)/src/testing/qrm_test_err.F90 \
+		   $(topdir)/src/testing/qrm_test_methods.F90 \
+		   $(topdir)/src/testing/qrm_test_ord.F90 \
+		   $(topdir)/src/testing/qrm_test_c.F90 \
+		   $(topdir)/src/testing/qrm_test_pipe.F90 \
+		   $(topdir)/src/testing/qrm_test_multiples.F90 \
+		   $(topdir)/src/testing/qrm_test_aux_c.c
+
+
+
+
+TESTINGSRC = $(addprefix $(arith), $(notdir $(TESTINGTEMPLATES)))
+TESTINGOBJS = $(patsubst %.F90,%.o,$(patsubst %.f,%.o,$(patsubst %.c,%.o,$(TESTINGSRC))))
+
+
+.SECONDEXPANSION:
+
+TESTINGSUBS=$(filter %$*, $(TESTINGTEMPLATES))
+$(TESTINGSRC): $(arith)% : $$(TESTINGSUBS)
+	perl $(topdir)/aux/$(arith).pl $< > $@
+
+
+qrm_testing: $(TESTINGOBJS)
+	$(LINK) $(LDFLAGS) -o $(arith)$@ $(TESTINGOBJS) $(LIB) $(CLIB) $(LIBS)
+
+
+$(addprefix $(arith),qrm_testing.o)   :  $(addprefix $(arith),qrm_testing_mod.mod)
+$(addprefix $(arith),qrm_test_pipe.o) :  $(addprefix $(arith),qrm_testing_mod.mod)
+$(addprefix $(arith),qrm_test_err.o) :  $(addprefix $(arith),qrm_testing_mod.mod)
+$(addprefix $(arith),qrm_test_ord.o) :  $(addprefix $(arith),qrm_testing_mod.mod)

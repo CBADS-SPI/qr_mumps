@@ -1,0 +1,20 @@
+.PHONY: lib examples clean distclean
+
+lib:
+	(cd src; $(MAKE) lib)
+
+examples: lib
+	(cd examples; $(MAKE) examples)
+
+testing: lib
+	(cd testing; $(MAKE) testing)
+
+clean:
+	(cd src; $(MAKE) clean)
+	(cd examples; $(MAKE) clean)
+
+distclean:
+	(cd src; $(MAKE) distclean)
+	(cd lib; rm *)
+	(cd include; rm *)
+	(cd examples; $(MAKE) distclean)

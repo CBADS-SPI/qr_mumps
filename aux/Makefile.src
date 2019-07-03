@@ -1,0 +1,48 @@
+include ../Make.inc
+include Makefile.rules.inc
+
+LIB=../lib/lib${arith}qrm.a
+CLIB=../lib/libqrm_common.a
+
+ifndef ARITH
+ARITH = d
+endif
+
+
+lib: $(addsuffix prec,$(ARITH))
+
+
+
+dprec:  Makefile.rules.inc
+	($(MAKE) objs PREC=-Ddprec  arith=d)
+
+sprec:  Makefile.rules.inc
+	($(MAKE) objs PREC=-Dsprec  arith=s)
+
+zprec:
+	($(MAKE) objs PREC=-Dzprec  arith=z)
+
+cprec:
+	($(MAKE) objs PREC=-Dcprec  arith=c)
+
+Makefile.rules.inc: $(topdir)/aux/Makefile.rules.inc
+	cp $(topdir)/aux/$@ $@
+
+
+
+objs: $(ARITHMOBJS) $(COMMONOBJS)
+	$(AR) $(LIB)  $(ARITHMOBJS) 
+	$(AR) $(CLIB) $(COMMONOBJS) 
+	(cp *.mod ../include)
+	(cp *.h ../include)
+	(perl $(topdir)/aux/$(arith).pl $(topdir)/src/include/qrm_c.h > ../include/$(arith)qrm_c.h)
+	(cp $(topdir)/src/include/qrm_common_c.h ../include)
+
+.PHONY: clean distclean
+
+distclean: clean
+	(rm -f *.F90 *.c *.h *.f)
+
+clean: 
+	(rm -f *.o *.mod)
+

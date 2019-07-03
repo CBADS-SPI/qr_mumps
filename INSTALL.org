@@ -1,0 +1,135 @@
+* Prerequisites
+  - qr_mumps requires Fortran and C compilers. qr_mumps uses some
+    features of the Fortran 2008 standard, therefore make sure you use
+    a relatively recent compiler (e.g., gfortran 4.8 or newer)
+  - BLAS and LAPACK. 
+
+    
+* Optional dependencies
+  - COLAMD, SCOTCH or Metis for fill-reducing matrix permutations.
+  - StarPU for parallelism. qr_mumps requires StarPU version 1.2.0rc5
+    or newer. alternatively, qr_mumps can be compiled without StarPU,
+    in which case it will only run sequentially. We recommend using
+    the svn code in the 1.2 branch which can be downloaded with
+    anonymous svn access:
+
+    #+begin_src sh
+    svn export https://scm.gforge.inria.fr/anonscm/svn/starpu/branches/starpu-1.2
+    #+end_src
+
+    
+* Install
+  qr_mumps is compiled and installed in a separate build
+  directory.
+  In order to build qr_mumps:
+  1) in the makeincs directory, choose a file Make.inc.xyz that better
+     suits your system configuration and edit it if need be. You can
+     also make a copy if you wish and give it a different extension
+     like Make.inc.abc
+  2) from the top directory type
+
+     #+begin_src sh
+     make BUILD=qrm_build PLAT=xyz ARITH="d s"
+     #+end_src
+
+     where, BUILD is the directory where qr_mumps has to be built,
+     PLAT is the extension of the chosen Make.inc file and ARITH is
+     the list of arithmetics that have to be built (d, s, z, and c are
+     available; d is used if not specified).
+
+
+  qr_mumps will be built in the specified BUILD directory along with
+  examples and tests. All further recompilation can be done directly
+  inside that directory.
+
+
+* Install with the spack package manager
+  qr_mumps can be installed with the [[https://github.com/LLNL/spack][spack]] package manager. Just type
+  in the following commands:
+
+  #+begin_src sh
+  git clone https://github.com/fpruvost/spack.git
+  cd spack
+  git checkout morse
+  export SPACK_ROOT=$PWD
+  . ./share/spack/setup-env.sh
+  spack install qr_mumps
+  #+end_src
+
+  This will automatically install qr_mumps along with its
+  dependencies. Please refer to the spack documentation for optimizing
+  the installation process.
+
+
+* Running tests and examples
+
+  
+** Testing
+   
+   Once qr_mumps is installed, you can run tests to make sure
+   everything works fine. Go to the qrm_build/testing directory and
+   download a few matrices, fill up a matfile.txt file with a list of
+   the matrices you have downloaded and then launch the testing
+   program:
+   
+   #+begin_src sh
+   cd qrm_build/testing
+   make
+   wget http://www.cise.ufl.edu/research/sparse/MM/vanHeukelum/cage6.tar.gz
+   wget http://www.cise.ufl.edu/research/sparse/MM/Meszaros/pltexpa.tar.gz
+   wget http://www.cise.ufl.edu/research/sparse/MM/Yoshiyasu/image_interp.tar.gz
+   echo 3 > matfile.txt
+   tar zxf cage6.tar.gz; echo cage6/cage6.mtx >> matfile.txt
+   tar zxf pltexpa.tar.gz; echo pltexpa/pltexpa.mtx >> matfile.txt
+   tar zxf image_interp.tar.gz; echo image_interp/image_interp.mtx >> matfile.txt
+   export QRM_NUM_THREADS=2
+   ./dqrm_testing
+   #+end_src
+  
+   Note that, upon execution, StarPU will complain about the fact that
+   the default scheduler (eager) is not efficient but it is, actually,
+   efficient enough; if you want to get rid of the message just set
+   the STARPU_SILENT environment variable to 1. Note that additional
+   (but only marginal) speedups can be obtained using the StarPU lws
+   scheduler; its implementation in StarPU-1.2.0rc5 is, bugged but the
+   bug has been fixed in the svn repository (both the 1/2 branch and
+   the trunk). If you want to give it a shot just set the STARPU_SCHED
+   environment variable to "lws" prior to launching your executable.
+
+** Examples
+   The qrm_build/examples directory contains a few examples of usage
+   of qr_mumps. The qrm_test program reads a matrix in MatrixMarket
+   format and parameters from an input file and solves a linear system
+   using one or more randomly generated right-hand sides. Here is an
+   example input file input.txt :
+
+   #+begin_quote
+   matfile       image_interp.mtx  ! The MatrixMarket file
+   qrm_ounit     6                 ! output unit
+   qrm_eunit     6                 ! error unit
+   qrm_ordering  4                 ! ordering (3=COLAMD, 4=METIS, 5=SCOTCH)
+   qrm_mb        128               ! mb
+   qrm_nb        128               ! nb
+   qrm_ib        32                ! ib
+   qrm_bh        0                 ! bh
+   qrm_keeph     1                 ! whether to keep the H factor or not
+   nrhs          4                 ! number of right-hand sides
+   qrm_rhsnb     2                 ! RHS blocking factor
+   qrm_mem_relax -1.d0             ! relaxation factor for memory-constraint execution
+   end
+   #+end_quote   
+
+   The program can then by run like this
+
+   #+begin_src sh
+   export QRM_NUM_THREADS=2
+   ./dqrm_test < input
+   #+end_src
+
+* Known issues
+  - the StarPU version 1.2.0rc5 has a bug which prevents from using
+    the lws scheduler in combination with StarPU contexts (used
+    internally by qr_mumps to define communication
+    descriptors). Either use the eager scheduler (the default choice)
+    or use StarPU branch 1.2 from the svn repository in order to use
+    the lws scheduler.

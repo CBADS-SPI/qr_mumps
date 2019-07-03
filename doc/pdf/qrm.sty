@@ -1,0 +1,48 @@
+\usepackage[reset,twoside,a4paper,includemp=false,top=2.5cm,bottom=2.5cm,left=2cm,right=2cm,headheight=30pt]{geometry}
+
+
+\usepackage{changepage}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{listings}
+
+\usepackage{color}
+\usepackage[bookmarks=true,
+            bookmarksnumbered=true,
+            bookmarksopen=false,
+            plainpages=false,
+            pdfpagelabels,
+            colorlinks,
+            citecolor=black,
+            pagecolor=black,
+            linkcolor=black,
+            menucolor=black,
+            urlcolor=black, 
+            linkcolor=black]{hyperref}
+
+% \usepackage{array,booktabs,arydshln,xcolor,colortbl}
+\usepackage{array,booktabs,xcolor,colortbl}
+\newcommand\VRule[1][\arrayrulewidth]{\vrule width #1}
+\newcolumntype{C}{p{0.473\textwidth}}
+
+
+\newcommand{\qrm}{\texttt{qr\_mumps} }
+
+\newcommand{\lsts}[1]{\vspace{0.2cm}\noindent\lstset{language=Fortran, basicstyle=\normalsize\ttfamily,
+  commentstyle=\color{gray!80},frame=single,backgroundcolor=\color{gray!5}}\lstinputlisting{#1}\lstset{frame=none,,backgroundcolor=\color{white}}}
+
+\newcommand{\lst}[2]{\vspace{0.2cm}\noindent\begin{tabular}{!{\VRule[1pt]}C!{\VRule[1pt]}C!{\VRule[1pt]}}
+  \specialrule{1pt}{0pt}{0pt}
+  \rowcolor[gray]{.6} 
+  Fortran & C \\
+  \specialrule{1pt}{0pt}{0pt}
+\lstset{language=Fortran, basicstyle=\footnotesize\ttfamily,
+  commentstyle=\color{gray}}
+\lstinputlisting{#1}&
+\lstset{language=C, basicstyle=\footnotesize\ttfamily,
+  commentstyle=\color{gray}}
+\lstinputlisting{#2}\\
+  \specialrule{1pt}{0pt}{0pt}
+\end{tabular}
+\vspace{0.2cm}
+}

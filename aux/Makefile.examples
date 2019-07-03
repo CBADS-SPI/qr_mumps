@@ -1,0 +1,84 @@
+include ../Make.inc
+
+LIB=../lib/lib${arith}qrm.a
+CLIB=../lib/libqrm_common.a
+
+ifndef ARITH
+ARITH = d
+endif
+
+INCLUDES += -I../include
+
+examples: $(addsuffix prec,$(ARITH))
+
+lib:
+	(cd ..; make lib)
+
+dprec:
+	($(MAKE) qrm_test   PREC=-Ddprec  arith=d)
+	($(MAKE) qrm_test_c PREC=-Ddprec  arith=d)
+	($(MAKE) qrm_front  PREC=-Ddprec  arith=d)
+
+sprec:
+	($(MAKE) qrm_test   PREC=-Dsprec  arith=s)
+	($(MAKE) qrm_test_c PREC=-Dsprec  arith=s)
+	($(MAKE) qrm_front  PREC=-Dsprec  arith=s)
+
+zprec:
+	($(MAKE) qrm_test   PREC=-Dzprec  arith=z)
+	($(MAKE) qrm_test_c PREC=-Dzprec  arith=z)
+	($(MAKE) qrm_front  PREC=-Dzprec  arith=z)
+
+cprec:
+	($(MAKE) qrm_test   PREC=-Dcprec  arith=c)
+	($(MAKE) qrm_test_c PREC=-Dcprec  arith=c)
+	($(MAKE) qrm_front  PREC=-Dcprec  arith=c)
+
+
+.PHONY: clean distclean
+
+distclean: clean
+	(rm -f *.F90 *.c)
+
+clean: 
+	(rm -f *.o *.mod *qrm_test *qrm_front *qrm_test_c)
+
+
+
+FRNTTEMPLATE = $(topdir)/src/examples/qrm_front.F90 
+TESTTEMPLATE = $(topdir)/src/examples/qrm_test.F90 
+TESCTEMPLATE = $(topdir)/src/examples/qrm_test_c.c
+
+FRNTSRC = $(addprefix $(arith), $(notdir $(FRNTTEMPLATE)))
+TESTSRC = $(addprefix $(arith), $(notdir $(TESTTEMPLATE)))
+TESCSRC = $(addprefix $(arith), $(notdir $(TESCTEMPLATE)))
+
+FRNTOBJS = $(patsubst %.F90,%.o,$(FRNTSRC))
+TESTOBJS = $(patsubst %.F90,%.o,$(TESTSRC))
+TESCOBJS = $(patsubst %.c,%.o,$(TESCSRC))
+
+.SECONDEXPANSION:
+
+FRNTSUBS=$(filter %$*, $(FRNTTEMPLATE))
+$(FRNTSRC): $(arith)% : $$(FRNTSUBS)
+	perl $(topdir)/aux/$(arith).pl $< > $@
+
+
+TESTSUBS=$(filter %$*, $(TESTTEMPLATE))
+$(TESTSRC): $(arith)% : $$(TESTSUBS)
+	perl $(topdir)/aux/$(arith).pl $< > $@
+
+TESCSUBS=$(filter %$*, $(TESCTEMPLATE))
+$(TESCSRC): $(arith)% : $$(TESCSUBS)
+	perl $(topdir)/aux/$(arith).pl $< > $@
+
+
+qrm_test: $(TESTOBJS)
+	$(LINK) $(LDFLAGS) -o $(arith)$@ $(TESTOBJS) $(LIB) $(CLIB) $(LIBS)
+
+qrm_test_c: $(TESCOBJS)
+	$(LINK) $(LDFLAGS) -o $(arith)$@ $(TESCOBJS) $(LIB) $(CLIB) $(LIBS)
+
+qrm_front: $(FRNTOBJS)
+	$(LINK) $(LDFLAGS) -o $(arith)$@ $(FRNTOBJS) $(LIB) $(CLIB) $(LIBS)
+

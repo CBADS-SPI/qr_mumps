@@ -17,10 +17,10 @@ setup:
 
 .PHONY: lib examples
 
-lib:
+lib: setup
 	(cd $(BUILD); $(MAKE) lib)
 
-examples:
+examples: lib
 	(cd $(BUILD); $(MAKE) examples)
 
 

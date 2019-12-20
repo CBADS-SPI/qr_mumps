@@ -36,7 +36,7 @@ LINK    = $(FC)
 
 # compilers
 CC      = mpicc
-FC      = mpif90
+FC      = mpifort
 
 # compiler options
 FCFLAGS = -O3 -fPIC
@@ -76,16 +76,16 @@ LLAPACK  = -L/opt/intel/mkl/lib/intel64 -llapack
 # your METIS library
 LMETISDIR = /usr/lib 
 IMETIS    = -I/usr/include/parmetis
-LMETIS    = -L$(LMETISDIR) -lparmetis -lmetis -lptscotchparmetis 
+LMETIS    = -L$(LMETISDIR) -lparmetis -lmetis -lptscotchparmetis -lptscotch -lscotch -lz
 
 # your scotch library
-LSCOTCHDIR = /usr/lib
-ISCOTCH   = -I/usr/include/scotch
-LSCOTCH   = -L$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr
+LSCOTCHDIR = /usr/local/lib
+ISCOTCH   = -I/usr/local/include
+LSCOTCH   = -L$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr 
 
 LIBS =	$(LLAPACK) $(LBLAS) \
         $(LCOLAMD) $(LMETIS) \
-	$(LSCOTCH) $(LSTARPU) -lpthread
+	$(LSCOTCH) $(LSTARPU) -lpthread -lmpi
 
 %.mod: %.o
 	@true

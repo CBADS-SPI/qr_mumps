@@ -62,8 +62,8 @@ AR = ar -cr
 RANLIB = ranlib
 
 # your BLAS and LAPACK libraries
-LBLAS    = -L/opt/intel/mkl/lib/intel64 -lblas
-LLAPACK  = -L/opt/intel/mkl/lib/intel64 -llapack
+LBLAS = -lmkl_blas95_lp64
+LLAPACK = -L$(MKLROOT)/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -liomp5 -lpthread
 
 # your StarPU library
 # LSTARPU = -L/path/to/starpu -lstarpu

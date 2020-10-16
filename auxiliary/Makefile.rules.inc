@@ -135,7 +135,7 @@ $(COMMONSRC): % : $$(COMMONSUBS)
 ARITHMSUBS=$(filter %$*, $(TEMPLATES))
 .SECONDEXPANSION:
 $(ARITHMSRC): $(arith)% : $$(ARITHMSUBS)
-	perl $(topdir)/aux/$(arith).pl $< > $@
+	perl $(topdir)/auxiliary/$(arith).pl $< > $@
 
 
 
@@ -143,7 +143,7 @@ $(ARITHMSRC): $(arith)% : $$(ARITHMSUBS)
 # routines for allocatables and pointers and for all the arithmetics
 # from a template
 qrm_mem_mod.F90: $(topdir)/src/modules/qrm_mem_mod_template.F90
-	perl $(topdir)/aux/qrm_genmemmod.pl $< > $@
+	perl $(topdir)/auxiliary/qrm_genmemmod.pl $< > $@
 
 
 

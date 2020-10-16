@@ -59,7 +59,7 @@ TESTINGOBJS = $(patsubst %.F90,%.o,$(patsubst %.f,%.o,$(patsubst %.c,%.o,$(TESTI
 
 TESTINGSUBS=$(filter %$*, $(TESTINGTEMPLATES))
 $(TESTINGSRC): $(arith)% : $$(TESTINGSUBS)
-	perl $(topdir)/aux/$(arith).pl $< > $@
+	perl $(topdir)/auxiliary/$(arith).pl $< > $@
 
 
 qrm_testing: $(TESTINGOBJS)

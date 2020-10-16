@@ -61,16 +61,16 @@ TESCOBJS = $(patsubst %.c,%.o,$(TESCSRC))
 
 FRNTSUBS=$(filter %$*, $(FRNTTEMPLATE))
 $(FRNTSRC): $(arith)% : $$(FRNTSUBS)
-	perl $(topdir)/aux/$(arith).pl $< > $@
+	perl $(topdir)/auxiliary/$(arith).pl $< > $@
 
 
 TESTSUBS=$(filter %$*, $(TESTTEMPLATE))
 $(TESTSRC): $(arith)% : $$(TESTSUBS)
-	perl $(topdir)/aux/$(arith).pl $< > $@
+	perl $(topdir)/auxiliary/$(arith).pl $< > $@
 
 TESCSUBS=$(filter %$*, $(TESCTEMPLATE))
 $(TESCSRC): $(arith)% : $$(TESCSUBS)
-	perl $(topdir)/aux/$(arith).pl $< > $@
+	perl $(topdir)/auxiliary/$(arith).pl $< > $@
 
 
 qrm_test: $(TESTOBJS)

@@ -25,8 +25,8 @@ zprec:
 cprec:
 	($(MAKE) objs PREC=-Dcprec  arith=c)
 
-Makefile.rules.inc: $(topdir)/aux/Makefile.rules.inc
-	cp $(topdir)/aux/$@ $@
+Makefile.rules.inc: $(topdir)/auxiliary/Makefile.rules.inc
+	cp $(topdir)/auxiliary/$@ $@
 
 
 
@@ -35,7 +35,7 @@ objs: $(ARITHMOBJS) $(COMMONOBJS)
 	$(AR) $(CLIB) $(COMMONOBJS) 
 	(cp *.mod ../include)
 	(cp *.h ../include)
-	(perl $(topdir)/aux/$(arith).pl $(topdir)/src/include/qrm_c.h > ../include/$(arith)qrm_c.h)
+	(perl $(topdir)/auxiliary/$(arith).pl $(topdir)/src/include/qrm_c.h > ../include/$(arith)qrm_c.h)
 	(cp $(topdir)/src/include/qrm_common_c.h ../include)
 
 .PHONY: clean distclean

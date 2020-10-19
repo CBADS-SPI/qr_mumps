@@ -74,12 +74,14 @@ LLAPACK  = -L/opt/intel/mkl/lib/intel64 -llapack
 # ICOLAMD	 = -I/path/to/colamd/include
 
 # your METIS library
-LMETIS   = -lmetis
-IMETIS   = -I/usr/include
+LMETIS   = $(topdir)/../metis/build/Linux-x86_64/libmetis/libmetis.a
+IMETIS   = -I$(topdir)/../metis/build/Linux-x86_64/include
 
+LSCOTCHDIR = $(topdir)/../scotch/lib
 # your scotch library
-LSCOTCH  = -lscotch -lscotcherr
-ISCOTCH  = -I/usr/include/scotch
+LSCOTCH   = $(LSCOTCHDIR)/libesmumps.a $(LSCOTCHDIR)/libscotch.a $(LSCOTCHDIR)/libscotcherr.a 
+
+ISCOTCH  = -I$(topdir)/../scotch/include
 
 LIBS =	$(LLAPACK) $(LBLAS) \
         $(LCOLAMD) $(LMETIS) \

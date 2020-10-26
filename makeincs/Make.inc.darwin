@@ -62,7 +62,7 @@ AR = ar -cr
 RANLIB = ranlib
 
 # your BLAS and LAPACK libraries
-LBLAS    = /opt/intel/compilers_and_libraries_2020.3.279/mac/mkl/lib/libmkl_intel_lp64.a /opt/intel/compilers_and_libraries_2020.3.279/mac/mkl/lib/libmkl_intel_thread.a /opt/intel/compilers_and_libraries_2020.3.279/mac/mkl/lib/libmkl_core.a /opt/intel/compilers_and_libraries_2020.3.279/mac/compiler/lib/libiomp5.a
+LBLAS    = /opt/intel/compilers_and_libraries_2020.3.279/mac/mkl/lib/libmkl_intel_lp64.a /opt/intel/compilers_and_libraries/mac/mkl/lib/libmkl_intel_thread.a /opt/intel/compilers_and_libraries/mac/mkl/lib/libmkl_core.a /opt/intel/compilers_and_libraries/mac/lib/libiomp5.a
 # your StarPU library
 # LSTARPU = -L/path/to/starpu -lstarpu
 # ISTARPU = -I/path/to/starpu/include

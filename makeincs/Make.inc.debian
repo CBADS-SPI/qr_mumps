@@ -75,7 +75,7 @@ LLAPACK  = -L/opt/intel/mkl/lib/intel64 -llapack
 
 # your METIS library
 LMETIS   = $(topdir)/../metis/build/Linux-x86_64/libmetis/libmetis.a
-IMETIS   = -I$(topdir)/../metis/build/Linux-x86_64/include
+IMETIS   = -I$(topdir)/../metis/include
 
 LSCOTCHDIR = $(topdir)/../scotch/lib
 # your scotch library

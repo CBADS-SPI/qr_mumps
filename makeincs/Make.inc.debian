@@ -39,7 +39,7 @@ CC      = gcc
 FC      = gfortran
 
 # compiler options
-FCFLAGS = -O3 -fPIC
+FCFLAGS = -O3 -fPIC -fallow-argument-mismatch
 CFLAGS  = -O3 -fPIC
 
 # link options

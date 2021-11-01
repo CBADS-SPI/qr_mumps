@@ -28,6 +28,7 @@
 ## $Revision: 2248 $
 ##
 
+arch := $(shell uname -p)
 
 # write here the path to the qr_mumps top directory
 topdir=$(PWD)/../..
@@ -74,7 +75,7 @@ LLAPACK  = -L/opt/intel/mkl/lib/intel64 -llapack
 # ICOLAMD	 = -I/path/to/colamd/include
 
 # your METIS library
-LMETIS   = $(topdir)/../metis/build/Linux-x86_64/libmetis/libmetis.a
+LMETIS   = $(topdir)/../metis/build/Linux-$(arch)/libmetis/libmetis.a
 IMETIS   = -I$(topdir)/../metis/include
 
 LSCOTCHDIR = $(topdir)/../scotch/lib
